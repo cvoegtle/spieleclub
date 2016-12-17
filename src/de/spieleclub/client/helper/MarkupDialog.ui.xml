@@ -1,0 +1,20 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:spieleclub='urn:import:de.spieleclub.client.helper'>
+
+  <ui:style>
+  .panel {
+    padding: 3px;
+ 	}
+ 	
+ 	.textArea {
+ 		width: 100%;
+ 		height: 12em;
+ 	}
+  </ui:style>
+
+  <g:VerticalPanel width='17em' height='12em' styleName='{style.panel}'>
+  	<g:TextArea ui:field='markupArea' addStyleNames='{style.textArea}'/>
+  	<g:Button ui:field="closeButton"/>
+  </g:VerticalPanel>
+</ui:UiBinder>

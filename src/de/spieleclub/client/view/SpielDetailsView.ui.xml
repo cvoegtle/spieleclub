@@ -1,0 +1,27 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:style>
+	  ul {
+	    line-height: 1.5em;
+	    list-style-image: url("bullet.gif");
+	    list-style-type: square;
+	  }
+	  	
+	</ui:style>
+
+  <g:VerticalPanel ui:field="outerPanel">
+    <g:HTML ui:field="allTimesRanking"/>
+    <g:HTML ui:field="timesPlayed"/>
+    <g:HTML ui:field="firstDate"/>
+     
+    <g:HorizontalPanel spacing="5">
+	   <g:HTML ui:field="yearList"/>
+	</g:HorizontalPanel>
+	
+	<g:Button ui:field="closeButton"/>
+	
+  </g:VerticalPanel>
+</ui:UiBinder> 

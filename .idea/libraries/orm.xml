@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="orm">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.46/lib/user/orm" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.46/lib/user/orm" recursive="false" />
+  </library>
+</component>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="user">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.46/lib/user" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.46/lib/user" />
+    </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.46/lib/user" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.46/lib/user" recursive="false" type="SOURCES" />
+  </library>
+</component>

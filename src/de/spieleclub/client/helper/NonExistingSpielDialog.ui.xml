@@ -1,0 +1,40 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:spieleclub='urn:import:de.spieleclub.client.helper'>
+
+  <ui:image field='logo' src='poeppel.jpeg'/>
+
+  <ui:style>
+  .panel {
+    padding: 10px;
+ 	}
+
+  .infoText {
+    text-align: left;
+  }
+
+  @sprite .logo {
+    gwt-image: 'logo';
+    float: left;
+    padding-right: 1em;
+  }
+
+  .buttons {
+    text-align: right;
+  }
+
+  </ui:style>
+
+  <g:HTMLPanel width='24em' styleName='{style.panel}'>
+    <div class='{style.logo}'/>
+
+    <div class='{style.infoText}'>
+    Das Spiel <b><span ui:field="spieleName" /></b> wurde bisher noch nie gespielt. Soll es neu angelegt werden?
+    </div>
+
+    <div class='{style.buttons}' spacing="2px">
+      <g:Button styleName='gwt-Button' text='Anlegen' ui:field='createButton' />
+      <g:Button styleName='gwt-Button' text='Abbrechen' ui:field='cancelButton' />
+    </div>
+  </g:HTMLPanel>
+</ui:UiBinder>

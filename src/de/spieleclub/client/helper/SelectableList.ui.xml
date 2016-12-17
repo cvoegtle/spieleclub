@@ -1,0 +1,70 @@
+<ui:UiBinder
+  xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:spieleclub='urn:import:de.spieleclub.client.helper'>
+
+  <ui:image field='gradient' src='gradient_bg_dark.png' repeatStyle='Horizontal'/>
+
+  <ui:style>
+  .outer {
+    border-left: 1px solid #999;
+    border-right: 1px solid #999;
+    border-bottom: 1px solid #999;
+    cursor: pointer;
+    cursor: hand;
+  }
+
+  .header {
+  	gwt-image: 'gradient';
+  	background-color: #d3d6dd;
+    table-layout: fixed;
+    width: 100%;
+    height: 100%;
+  }
+
+  .header td {
+    font-weight: bold;
+    padding: 2px 0 1px 10px;
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999;
+  }
+
+  .table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .table td {
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    padding: 2px 0 2px 10px;
+  }
+    
+  </ui:style>
+
+  <ui:style field='selectionStyle'
+    type='de.spieleclub.client.helper.SelectableList.SelectionStyle'>
+
+  .selectedRow {
+    background: #adcce7;
+  }
+
+  .selectedRow td {
+    border-top: 1px solid #88a4d6;
+    border-bottom: 1px solid #7b97d0;
+  }
+  </ui:style>
+
+  <g:VerticalPanel styleName='{style.outer}'>
+  	 <g:FlowPanel height='2em'>
+       <g:FlexTable ui:field='header' styleName='{style.header}' cellSpacing='0' cellPadding='0'/>
+	 </g:FlowPanel>
+  	 <g:LayoutPanel height='10em'>
+  	   <g:layer height='10em'>
+		   <g:ScrollPanel>
+		     <g:FlexTable ui:field='table' styleName='{style.table}' cellSpacing='0' cellPadding='0'/>
+		   </g:ScrollPanel>
+	   </g:layer>
+	 </g:LayoutPanel>
+  </g:VerticalPanel>
+</ui:UiBinder>

@@ -1,0 +1,33 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:style>
+	  .dateLabel {
+	  	font-weight: bold;
+	  }
+	  
+	  ul {
+	    line-height: 1.5em;
+	    list-style-image: url("bullet.gif");
+	    list-style-type: square;
+	  }
+	  		  
+	</ui:style>
+
+  <g:VerticalPanel ui:field="outerPanel">
+    <g:HorizontalPanel ui:field="datePanel" spacing="5">
+      <g:Label ui:field="dateLabel" styleName='{style.dateLabel}'/>
+      <g:Button ui:field="editButton">Bearbeiten</g:Button>
+    </g:HorizontalPanel>
+     
+    <g:HorizontalPanel spacing="5">
+      <g:Label ui:field="description"/>
+	</g:HorizontalPanel>
+	    
+    <g:HorizontalPanel spacing="5">
+	   <g:HTML ui:field="spieleList"/>
+	</g:HorizontalPanel>
+  </g:VerticalPanel>
+</ui:UiBinder> 

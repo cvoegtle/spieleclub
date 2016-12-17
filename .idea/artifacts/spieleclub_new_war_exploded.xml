@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" build-on-make="true" name="spieleclub-new:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/spieleclub_new_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="spieleclub-new" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="user" />
+          <element id="library" level="project" name="gwt-user" />
+          <element id="library" level="project" name="orm" />
+        </element>
+        <element id="file-copy" path="$PROJECT_DIR$/src/log4j.properties" />
+      </element>
+      <element id="javaee-facet-resources" facet="spieleclub-new/web/Web" />
+      <element id="module-output" name="spieleclub-new" />
+      <element id="gwt-compiler-output" facet="spieleclub-new/gwt/GWT" />
+    </root>
+  </artifact>
+</component>
