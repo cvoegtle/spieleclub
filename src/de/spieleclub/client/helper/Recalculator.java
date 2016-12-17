@@ -67,7 +67,7 @@ public class Recalculator {
       }
     });
   }
-  
+
   private void recalculateFirstDates() {
     final long startTime = System.currentTimeMillis();
 
