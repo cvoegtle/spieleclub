@@ -23,14 +23,18 @@
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
   </system-properties>
 
-  <instance-class>F1</instance-class>
-  <automatic-scaling>
+  <instance-class>B1</instance-class>
+<!--  <automatic-scaling>
     <min-idle-instances>1</min-idle-instances>
     <max-idle-instances>1</max-idle-instances>
     <min-pending-latency>15s</min-pending-latency>
     <max-pending-latency>15s</max-pending-latency>
     <max-concurrent-requests>50</max-concurrent-requests>
-  </automatic-scaling>
+  </automatic-scaling> -->
+  <basic-scaling>
+    <max-instances>1</max-instances>
+    <idle-timeout>360s</idle-timeout>
+  </basic-scaling>
 
 
 </appengine-web-app>

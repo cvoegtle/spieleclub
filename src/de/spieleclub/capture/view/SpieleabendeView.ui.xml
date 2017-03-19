@@ -35,15 +35,13 @@
   	<g:HorizontalPanel ui:field="infoArea">
 	    <g:HTML>
 	    <h2>Gespielte Spiele</h2>
-	    Wir fanden die Idee gut, die Spiele aufzuschreiben, die an den Spieleabenden gespielt werden. 
-	    An dieser Liste kann man sehr sch&ouml;n sehen, welche Spiele uns zur Zeit gefallen, welche wir einmal 
-	    ausprobiert haben und welche Spiele wir st&auml;ndig spielen.<p/>
-	    An dieser Liste kann jeder die Bandbreite der Spiele absch&auml;tzen. Ein Neuling kann so im Voraus ahnen, 
-	    was ihn erwartet, wenn er mittwochs kommt. Auch wenn es ans Geschenke-Ausw&auml;hlen geht, kann diese &Uuml;bersicht 
-	    helfen: "Was st&auml;ndig im Spieleclub gespielt wird, kann so schlecht nicht sein."<p/>
-	    Anmerkung: Wenn ein Spiel an einem Abend an einem Tisch mit &uuml;berwiegend gleichbleibender Besetzung mehrfach gespielt 
-	    wurde, z&auml;hlen wir es nur einmal. Dies betrifft aktuell (Anfang 2010) zum Beispiel Dominion und Fauna.<p/> </g:HTML>
-    </g:HorizontalPanel>    
+				Seit 1998 notieren dokumentieren wir die Spiele die wir im Spieleclub spielen. Wir tun das für uns, damit wir
+				so wichtige Fragen beantworten können wie: "was ist das meist gespielte Spiel?" (Tichu), "wann haben wir das letzte
+				Mal XY gespielt" ...<p/>
+			Aber wir tun das auch für Neugierige, die sich für die Bandbreite unserer Spiele interessieren.
+			<a href="info@spieleclub-paderborn.de">Schreibt uns</a>, wenn Ihr Fragen oder Anregungen habt.
+			</g:HTML>
+    </g:HorizontalPanel>
   	<g:HorizontalPanel spacing="4">
 	    <g:Label ui:field="yearListDescription"/>	    
 	    <g:ListBox ui:field="yearList"/>

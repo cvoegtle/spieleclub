@@ -67,7 +67,7 @@ public class SpieleabendeViewImpl extends Composite implements SpieleabendeView 
   }
 
   private void initAnchors() {
-    spieleclubAnchor = new Anchor(Global.texte.backToSpieleclub(), "http://www.spieleclub-paderborn.de");
+    spieleclubAnchor = new Anchor(Global.texte.backToSpieleclub(), "https://www.spieleclub-paderborn.de");
     RootPanel.get("linkToSpieleclub").add(spieleclubAnchor);
     
     userAnchor = new Anchor();
@@ -81,7 +81,7 @@ public class SpieleabendeViewImpl extends Composite implements SpieleabendeView 
     columnsDescription.setText(Global.texte.columns());
     columnsList.clear();
     for (int col = 1; col <= ColumnsCookie.getMaxColumns(); col++) {
-      columnsList.addItem(new Integer(col).toString());
+      columnsList.addItem(Integer.toString(col));
     }
     columnsList.setSelectedIndex(ColumnsCookie.readNumberOfColumns()-1);
   }
