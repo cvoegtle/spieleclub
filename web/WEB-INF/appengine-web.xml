@@ -3,8 +3,8 @@
   <application>spieleclub-paderborn-hdr</application>
   <module>default</module>
 
-  <version>18</version>
-
+  <version>21</version>
+  <runtime>java8</runtime>
   <threadsafe>true</threadsafe>
 
   <!-- Configure serving/caching of GWT files -->
@@ -21,6 +21,7 @@
   <!-- Configure java.util.logging -->
   <system-properties>
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+    <property name="appengine.datastore.disableChunkSizeWarning" value="true"/>
   </system-properties>
 
   <instance-class>B1</instance-class>
