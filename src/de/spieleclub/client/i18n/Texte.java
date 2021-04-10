@@ -51,4 +51,7 @@ public interface Texte extends Constants {
   String on();
   String detailsAreTransfered();
   String columns();
+
+  String total();
+  String gamesPlayed();
 }

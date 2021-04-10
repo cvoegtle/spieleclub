@@ -1,60 +1,62 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder 
-  xmlns:ui="urn:ui:com.google.gwt.uibinder"
-  xmlns:g="urn:import:com.google.gwt.user.client.ui"
-    xmlns:d="urn:import:com.google.gwt.user.datepicker.client">
+<ui:UiBinder
+        xmlns:ui="urn:ui:com.google.gwt.uibinder"
+        xmlns:g="urn:import:com.google.gwt.user.client.ui"
+        xmlns:d="urn:import:com.google.gwt.user.datepicker.client">
 
-	
-	<ui:style>
-	  .outerStyle {
-	  	padding-top: 3px;
-	  	padding-left: 4px;
-	  	padding-right: 4px;
-	  }
-	  
-	  .smallStyle {
-	  	font-size: x-small;
-	  }
-	  
-	  
-	  .controlStyle {
-	  	padding-top: 3px;
-	  	padding-left: 4px;
-	  	padding-right: 4px;
-	  	vertical-align: middle;
-	  }
-	  
-	  .buttonStyle {
-	  	vertical-align: middle;
-	  }
-	 
-	  .headerFlexTable {
-	  	gwt-image: 'gradient';
-	  	background-color: #d3d6dd;
-	  }
-	 
-	  .analysisFlexTable {
-	  	vertical-align: top;
-	  }
-	  
-	  .dateBox {
-	  	width: 7em;
-	  }
-	  
-	</ui:style>
+
+  <ui:style>
+    .outerStyle {
+      padding-top: 3px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+
+    .smallStyle {
+      font-size: x-small;
+    }
+
+    .controlStyle {
+      padding-top: 3px;
+      padding-left: 4px;
+      padding-right: 4px;
+      vertical-align: middle;
+    }
+
+    .buttonStyle {
+      vertical-align: middle;
+    }
+
+    .headerFlexTable {
+      gwt-image: 'gradient';
+      background-color: #d3d6dd;
+    }
+
+    .analysisFlexTable {
+      vertical-align: top;
+    }
+
+    .dateBox {
+      width: 7em;
+    }
+
+  </ui:style>
 
   <g:VerticalPanel addStyleNames="{style.outerStyle}">
-  	<g:HorizontalPanel spacing="4">
-	    <g:Label ui:field="yearListDescription"/>	    
-	    <g:ListBox ui:field="yearList"/>
-	    <g:Anchor ui:field="listAnchor" href="spieleclub.html" />	    
-	</g:HorizontalPanel>
-  	<g:HorizontalPanel spacing="4">
-  	   <g:CheckBox ui:field="checkBoxCustomPeriod">eigener Zeitraum</g:CheckBox>
-  	   <d:DateBox ui:field="startDate" addStyleNames="{style.dateBox}"/>
-  	   <g:Label>bis</g:Label>
-  	   <d:DateBox ui:field="endDate" addStyleNames="{style.dateBox}"/>
-	</g:HorizontalPanel>
-	<g:HorizontalPanel ui:field="analysisPanel"/>
+    <g:HorizontalPanel spacing="4">
+      <g:Label ui:field="yearListDescription"/>
+      <g:ListBox ui:field="yearList"/>
+      <g:Anchor ui:field="listAnchor" href="spieleclub.html"/>
+    </g:HorizontalPanel>
+    <g:HorizontalPanel spacing="4">
+      <g:CheckBox ui:field="checkBoxCustomPeriod">eigener Zeitraum</g:CheckBox>
+      <d:DateBox ui:field="startDate" addStyleNames="{style.dateBox}"/>
+      <g:Label>bis</g:Label>
+      <d:DateBox ui:field="endDate" addStyleNames="{style.dateBox}"/>
+    </g:HorizontalPanel>
+    <g:HorizontalPanel ui:field="analysisPanel"/>
+    <g:HorizontalPanel spacing="4">
+      <g:Label ui:field="gamesCount"/>
+    </g:HorizontalPanel>
   </g:VerticalPanel>
 </ui:UiBinder> 

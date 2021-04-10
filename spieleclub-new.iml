@@ -15,13 +15,13 @@
       <configuration>
         <setting name="compilerMaxHeapSize" value="1024" />
         <setting name="gwtScriptOutputStyle" value="DETAILED" />
-        <setting name="gwtSdkUrl" value="file://$USER_HOME$/Google Developer/gwt-2.8.0" />
+        <setting name="gwtSdkUrl" value="file://$USER_HOME$/Google_Developer/gwt-2.8.0" />
         <setting name="webFacet" value="Web" />
       </configuration>
     </facet>
     <facet type="google-app-engine" name="Google App Engine">
       <configuration>
-        <sdk-home-path>$USER_HOME$/Google Developer/appengine-java-sdk-1.9.46</sdk-home-path>
+        <sdk-home-path>$USER_HOME$/Google_Developer/appengine-java-sdk-1.9.53</sdk-home-path>
         <run-enhancer-on-make>true</run-enhancer-on-make>
         <files-to-enhance>
           <file path="$MODULE_DIR$/src" />

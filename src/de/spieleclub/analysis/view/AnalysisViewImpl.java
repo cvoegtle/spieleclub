@@ -1,10 +1,5 @@
 package de.spieleclub.analysis.view;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,16 +10,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.datepicker.client.DateBox;
-
 import de.spieleclub.client.Global;
 import de.spieleclub.client.event.AnchorClickEventHandler;
 import de.spieleclub.client.event.AnchorClickHandlerFactory;
@@ -34,25 +21,30 @@ import de.spieleclub.client.helper.SpieleDetailsDialog;
 import de.spieleclub.client.helper.TableWithHeader;
 import de.spieleclub.shared.helper.ColumnAccess;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class AnalysisViewImpl extends Composite implements AnalysisView {
 
-  @UiTemplate("AnalysisView.ui.xml")
-  interface AnalysisViewUiBinder extends UiBinder<Widget, AnalysisViewImpl> {
-  }
-
   private static AnalysisViewUiBinder uiBinder = GWT.create(AnalysisViewUiBinder.class);
-
+  @UiField
+  Anchor listAnchor;
+  @UiField
+  Label yearListDescription;
+  @UiField
+  ListBox yearList;
+  @UiField
+  HorizontalPanel analysisPanel;
+  @UiField
+  CheckBox checkBoxCustomPeriod;
+  @UiField
+  DateBox startDate;
+  @UiField
+  DateBox endDate;
+  @UiField
+  Label gamesCount;
   private Presenter presenter;
-
-  @UiField  Anchor listAnchor;
-  @UiField  Label yearListDescription;
-  @UiField  ListBox yearList;
-  @UiField  HorizontalPanel analysisPanel;
-
-  @UiField  CheckBox checkBoxCustomPeriod;
-  @UiField  DateBox startDate;
-  @UiField  DateBox endDate;
-
   private TableWithHeader analysisTable;
 
   public AnalysisViewImpl() {
@@ -66,11 +58,11 @@ public class AnalysisViewImpl extends Composite implements AnalysisView {
   private void initCustomPeriod() {
     startDate.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd.MM.yyyy")));
     endDate.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd.MM.yyyy")));
-    
-    // Workaround um einen Fehler in der DateBox. €nderungen Ÿber die Texteingabe 
+
+    // Workaround um einen Fehler in der DateBox. Ã„nderungen Ã¼ber die Texteingabe
     // werden ignoriert
     startDate.getTextBox().addValueChangeHandler(new ValueChangeHandler<String>() {
-      
+
       @Override
       public void onValueChange(ValueChangeEvent<String> event) {
         if (event.getValue() == null || event.getValue().equals("")) {
@@ -78,9 +70,9 @@ public class AnalysisViewImpl extends Composite implements AnalysisView {
         }
       }
     });
-    
+
     endDate.getTextBox().addValueChangeHandler(new ValueChangeHandler<String>() {
-      
+
       @Override
       public void onValueChange(ValueChangeEvent<String> event) {
         if (event.getValue() == null || event.getValue().equals("")) {
@@ -131,6 +123,7 @@ public class AnalysisViewImpl extends Composite implements AnalysisView {
   public void clear() {
     yearList.clear();
     analysisTable.clear();
+    gamesCount.setText("");
   }
 
   @Override
@@ -141,19 +134,8 @@ public class AnalysisViewImpl extends Composite implements AnalysisView {
   @Override
   public void setAvailablePeriods(List<String> availablePeriods) {
     yearList.clear();
-    Iterator<String> it = availablePeriods.iterator();
-    while (it.hasNext()) {
-      yearList.addItem(it.next());
-    }
-  }
-
-  @Override
-  public void setSelectedPeriod(String selectedPeriod) {
-    for (int index = 0; index < yearList.getItemCount(); index++) {
-      if (yearList.getItemText(index).equals(selectedPeriod)) {
-        yearList.setSelectedIndex(index);
-        break;
-      }
+    for (String availablePeriod : availablePeriods) {
+      yearList.addItem(availablePeriod);
     }
   }
 
@@ -165,6 +147,7 @@ public class AnalysisViewImpl extends Composite implements AnalysisView {
   @Override
   public void setAnalysisData(List<ColumnAccess> analysisData) {
     analysisTable.setValues(analysisData);
+    gamesCount.setText(Global.texte.total() + " " + analysisData.size() + " " + Global.texte.gamesPlayed());
   }
 
   @Override
@@ -206,17 +189,31 @@ public class AnalysisViewImpl extends Composite implements AnalysisView {
     presenter.onCustomPeriodChanged();
   }
 
-
   @Override
   public String getSelectedPeriod() {
     String selectedPeriod = null;
-    
+
     int selectedIndex = yearList.getSelectedIndex();
     if (selectedIndex >= 0) {
       selectedPeriod = yearList.getItemText(selectedIndex);
     }
-    
+
     return selectedPeriod;
+  }
+
+  @Override
+  public void setSelectedPeriod(String selectedPeriod) {
+    for (int index = 0; index < yearList.getItemCount(); index++) {
+      if (yearList.getItemText(index).equals(selectedPeriod)) {
+        yearList.setSelectedIndex(index);
+        break;
+      }
+    }
+  }
+
+  @Override
+  public boolean isCustomPeriod() {
+    return checkBoxCustomPeriod.getValue();
   }
 
   @Override
@@ -224,8 +221,7 @@ public class AnalysisViewImpl extends Composite implements AnalysisView {
     checkBoxCustomPeriod.setValue(checked);
   }
 
-  @Override
-  public boolean isCustomPeriod() {
-    return checkBoxCustomPeriod.getValue();
+  @UiTemplate("AnalysisView.ui.xml")
+  interface AnalysisViewUiBinder extends UiBinder<Widget, AnalysisViewImpl> {
   }
 }
