@@ -9,24 +9,20 @@
         <webroots>
           <root url="file://$MODULE_DIR$/web" relative="/" />
         </webroots>
-        <sourceRoots />
       </configuration>
     </facet>
     <facet type="gwt" name="GWT">
       <configuration>
         <setting name="compilerMaxHeapSize" value="1024" />
         <setting name="gwtScriptOutputStyle" value="DETAILED" />
-        <setting name="gwtSdkUrl" value="file://$USER_HOME$/Google_Developer/gwt-2.8.0" />
+        <setting name="gwtSdkUrl" value="file://$USER_HOME$/Google_Developer/gwt-2.10.0" />
         <setting name="webFacet" value="Web" />
       </configuration>
     </facet>
-    <facet type="google-app-engine" name="Google App Engine">
+    <facet type="app-engine-flexible" name="Google App Engine Flexible">
       <configuration>
-        <sdk-home-path>$USER_HOME$/Google_Developer/appengine-java-sdk-1.9.53</sdk-home-path>
-        <run-enhancer-on-make>true</run-enhancer-on-make>
-        <files-to-enhance>
-          <file path="$MODULE_DIR$/src" />
-        </files-to-enhance>
+        <option name="appYamlPath" value="$MODULE_DIR$/app.yaml" />
+        <option name="dockerDirectory" value="" />
       </configuration>
     </facet>
   </component>
@@ -40,5 +36,6 @@
     <orderEntry type="library" name="gwt-user" level="project" />
     <orderEntry type="library" name="user" level="project" />
     <orderEntry type="library" name="orm" level="project" />
+    <orderEntry type="library" name="gwt-use" level="project" />
   </component>
 </module>

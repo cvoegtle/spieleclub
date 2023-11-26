@@ -3,9 +3,7 @@
   <application>spieleclub-paderborn-hdr</application>
   <module>default</module>
 
-  <version>21</version>
-  <runtime>java8</runtime>
-  <threadsafe>true</threadsafe>
+  <version>23</version>
 
   <!-- Configure serving/caching of GWT files -->
   <static-files>
@@ -24,18 +22,13 @@
     <property name="appengine.datastore.disableChunkSizeWarning" value="true"/>
   </system-properties>
 
-  <instance-class>B1</instance-class>
-<!--  <automatic-scaling>
-    <min-idle-instances>1</min-idle-instances>
+  <runtime>java17</runtime>
+  <threadsafe>true</threadsafe>
+  <instance-class>F4</instance-class>
+  <app-engine-apis>true</app-engine-apis> <!--  wichtig für java 11 Umgebung-->
+  <automatic-scaling>
+    <min-idle-instances>0</min-idle-instances>
     <max-idle-instances>1</max-idle-instances>
-    <min-pending-latency>15s</min-pending-latency>
-    <max-pending-latency>15s</max-pending-latency>
-    <max-concurrent-requests>50</max-concurrent-requests>
-  </automatic-scaling> -->
-  <basic-scaling>
-    <max-instances>1</max-instances>
-    <idle-timeout>360s</idle-timeout>
-  </basic-scaling>
-
+  </automatic-scaling>
 
 </appengine-web-app>
