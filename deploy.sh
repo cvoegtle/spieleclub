@@ -4,8 +4,8 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR"
 
-export JAVA_HOME="${JAVA_HOME:-/Users/cv/Library/Java/JavaVirtualMachines/temurin-17.0.15/Contents/Home}"
-echo "Building project with Maven on Java 17..."
+export JAVA_HOME="${JAVA_HOME:-/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home}"
+echo "Building project with Maven on Java 21..."
 /Users/cv/Library/apache-maven-3.9.9/bin/mvn clean package
 
 echo "Setting gcloud project..."

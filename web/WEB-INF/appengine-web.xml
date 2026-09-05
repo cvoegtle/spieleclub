@@ -16,7 +16,7 @@
     <property name="appengine.use.EE8" value="true"/>
   </system-properties>
 
-  <runtime>java17</runtime>
+  <runtime>java21</runtime>
   <threadsafe>true</threadsafe>
   <instance-class>F2</instance-class>
   <app-engine-apis>true</app-engine-apis>
