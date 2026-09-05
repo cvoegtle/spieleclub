@@ -1,0 +1,12 @@
+indexes:
+- kind: PersistentRankedSpiel
+  ancestor: yes
+  properties:
+  - name: rankedSpiele_INTEGER_IDX
+    direction: asc
+
+- kind: PersistentGespieltesSpiel
+  ancestor: yes
+  properties:
+  - name: gespielteSpiele_INTEGER_IDX
+    direction: asc

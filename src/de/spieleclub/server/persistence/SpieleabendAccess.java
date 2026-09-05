@@ -2,63 +2,56 @@ package de.spieleclub.server.persistence;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
 
 import de.spieleclub.shared.Spieleabend;
 
 public class SpieleabendAccess {
-  private PersistenceManager pm;
+  private DatastoreService datastore;
   
-  public SpieleabendAccess(PersistenceManager pm) {
-    this.pm = pm;
+  public SpieleabendAccess(DatastoreService datastore) {
+    this.datastore = datastore;
   }
   
-  @SuppressWarnings("unchecked")
   public List<Spieleabend> read(Date startDate, Date endDate, SortingOrder sortingOrder) {
-    List<PersistentSpieleabend> queryResult; 
+    Query query = new Query(PersistentSpieleabend.KIND);
     
-    if (startDate == null && endDate == null) {
-      Query query = pm.newQuery(PersistentSpieleabend.class);
-      query.setOrdering("date " + sortingOrder);
-      queryResult = (List<PersistentSpieleabend>)query.execute();        
-    } else if (startDate != null && endDate == null) {
-      Query query = pm.newQuery(PersistentSpieleabend.class, "date >= start_date");
-      query.declareImports("import java.util.Date");
-      query.declareParameters("Date start_date");
-      query.setOrdering("date " + sortingOrder);
-      queryResult = (List<PersistentSpieleabend>)query.execute(startDate);        
-    } else if (startDate == null && endDate != null) {
-      Query query = pm.newQuery(PersistentSpieleabend.class, "date <= end_date");
-      query.declareImports("import java.util.Date");
-      query.declareParameters("Date end_date");
-      query.setOrdering("date " + sortingOrder);
-      queryResult = (List<PersistentSpieleabend>)query.execute(endDate);        
-    } else {
-      Query query = pm.newQuery(PersistentSpieleabend.class, "date >= start_date && date <= end_date");
-      query.declareImports("import java.util.Date");
-      query.declareParameters("Date start_date, Date end_date");
-      query.setOrdering("date " + sortingOrder);
-      queryResult = (List<PersistentSpieleabend>)query.execute(startDate, endDate);        
+    List<Query.Filter> filters = new ArrayList<>();
+    if (startDate != null) {
+      filters.add(new Query.FilterPredicate("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL, startDate));
+    }
+    if (endDate != null) {
+      filters.add(new Query.FilterPredicate("date", Query.FilterOperator.LESS_THAN_OR_EQUAL, endDate));
+    }
+    if (filters.size() == 1) {
+      query.setFilter(filters.get(0));
+    } else if (filters.size() > 1) {
+      query.setFilter(Query.CompositeFilterOperator.and(filters));
     }
 
-    return convertToSpieleabende(queryResult);
+    query.addSort("date", sortingOrder == SortingOrder.ASCENDING ? Query.SortDirection.ASCENDING : Query.SortDirection.DESCENDING);
+
+    List<Spieleabend> result = new ArrayList<>();
+    for (Entity entity : datastore.prepare(query).asIterable()) {
+      PersistentSpieleabend psa = new PersistentSpieleabend(entity, datastore);
+      result.add(psa.getSpieleabend());
+    }
+
+    return result;
   }
   
-  
-  @SuppressWarnings("unchecked")
   public Date readDateOfFirstSpieleabend(String spieleName) {
     Date dateOfFirstSpieleabend = new Date();
     
-    Query query = pm.newQuery(PersistentSpieleabend.class);
-    query.setOrdering("date asc");
+    Query query = new Query(PersistentSpieleabend.KIND);
+    query.addSort("date", Query.SortDirection.ASCENDING);
     
-    List<PersistentSpieleabend> queryResult = (List<PersistentSpieleabend>)query.execute(new PersistentGespieltesSpiel(spieleName));
-
-    for (PersistentSpieleabend spieleabend : queryResult) {
+    for (Entity entity : datastore.prepare(query).asIterable()) {
+      PersistentSpieleabend spieleabend = new PersistentSpieleabend(entity, datastore);
       if (spieleName == null || spieleName.equals("") || spieleabend.hasSpielBeenPlayed(spieleName)) {
         dateOfFirstSpieleabend = spieleabend.getDate();
         break;
@@ -67,20 +60,8 @@ public class SpieleabendAccess {
     
     return dateOfFirstSpieleabend;
   }
-  
 
   public List<Spieleabend> readAllSpieleabendeAscending() {
     return read(null, null, SortingOrder.ASCENDING);
   }
-
-  private List<Spieleabend> convertToSpieleabende(
-      List<PersistentSpieleabend> queryResult) {
-    List<Spieleabend> result = new ArrayList<Spieleabend>();
-    Iterator<PersistentSpieleabend> it = queryResult.iterator();
-    while (it.hasNext()) {
-      result.add(it.next().getSpieleabend());
-    }
-    return result;
-  }
-  
 }

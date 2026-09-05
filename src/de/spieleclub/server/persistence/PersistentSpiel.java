@@ -1,44 +1,24 @@
 package de.spieleclub.server.persistence;
 
 import java.util.Date;
+import java.util.Iterator;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Query;
 
 import de.spieleclub.shared.Spiel;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 public class PersistentSpiel {
-  @PrimaryKey
-  @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-  private Key key;
+  public static final String KIND = "PersistentSpiel";
 
-  @Persistent
+  private Key key;
   private String name;
-  
-  @Persistent
   private Date creation;
-  
-  @Persistent
   private PersistentSpieler creator;
 
-  public Spiel getSpiel() {
-    Spiel spiel = new Spiel();
-    spiel.setCreation(this.creation);
-    if (this.getCreator() != null) {
-      spiel.setCreator(this.getCreator().getSpieler());
-    }
-    spiel.setName(this.getName());
-    spiel.setWebsafeKey(KeyFactory.keyToString(key));
-    return spiel;
-  }
-  
   public PersistentSpiel(Spiel spiel) {
     this.setName(spiel.getName());
     this.setCreation(spiel.getCreation());
@@ -48,6 +28,45 @@ public class PersistentSpiel {
     if (spiel.getWebsafeKey() != null) {
       this.setKey(KeyFactory.stringToKey(spiel.getWebsafeKey()));
     }
+  }
+
+  public PersistentSpiel(Entity entity, DatastoreService datastore) {
+    this.key = entity.getKey();
+    this.name = (String) entity.getProperty("name");
+    this.creation = (Date) entity.getProperty("creation");
+
+    if (datastore != null && this.key != null) {
+      Query q = new Query(PersistentSpieler.KIND).setAncestor(this.key);
+      Iterator<Entity> it = datastore.prepare(q).asIterator();
+      if (it.hasNext()) {
+        this.creator = new PersistentSpieler(it.next());
+      }
+    }
+  }
+
+  public Entity toEntity() {
+    Entity entity;
+    if (key != null) {
+      entity = new Entity(key);
+    } else {
+      entity = new Entity(KIND);
+    }
+    entity.setProperty("name", name);
+    entity.setProperty("creation", creation);
+    return entity;
+  }
+
+  public Spiel getSpiel() {
+    Spiel spiel = new Spiel();
+    spiel.setCreation(this.creation);
+    if (this.getCreator() != null) {
+      spiel.setCreator(this.getCreator().getSpieler());
+    }
+    spiel.setName(this.getName());
+    if (key != null) {
+      spiel.setWebsafeKey(KeyFactory.keyToString(key));
+    }
+    return spiel;
   }
   
   public Key getKey() {

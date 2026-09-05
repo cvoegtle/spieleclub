@@ -1,17 +1,20 @@
 package de.spieleclub.server.service;
 
-import javax.jdo.PersistenceManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
 public class RankingCacheFactory {
-  PersistenceManager pm;
+  private DatastoreService datastore;
   
-  public RankingCacheFactory(PersistenceManager pm) {
-    this.pm = pm;
-  }
-  
-  
-  public RankingCache getRankingCache() {
-    return new PersistentRankingCache(pm);
+  public RankingCacheFactory(DatastoreService datastore) {
+    this.datastore = datastore;
   }
 
+  public RankingCacheFactory() {
+    this.datastore = DatastoreServiceFactory.getDatastoreService();
+  }
+  
+  public RankingCache getRankingCache() {
+    return new PersistentRankingCache(datastore != null ? datastore : DatastoreServiceFactory.getDatastoreService());
+  }
 }

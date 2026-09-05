@@ -2,23 +2,32 @@ package de.spieleclub.server.persistence;
 
 import java.util.Date;
 
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 public class PersistentDateOfFirstPlay {
+  public static final String KIND = "PersistentDateOfFirstPlay";
   
-  @PrimaryKey
   private String spielename;
-  
-  @Persistent
   private Date dateOfPlay;
 
   public PersistentDateOfFirstPlay(String spielename, Date dateOfFirstPlay) {
     this.spielename = spielename;
     this.dateOfPlay = dateOfFirstPlay;
+  }
+
+  public PersistentDateOfFirstPlay(Entity entity) {
+    this.spielename = (entity.getKey().getName() != null) ? entity.getKey().getName() : (String) entity.getProperty("spielename");
+    this.dateOfPlay = (Date) entity.getProperty("dateOfPlay");
+  }
+
+  public Entity toEntity() {
+    Key key = KeyFactory.createKey(KIND, spielename);
+    Entity entity = new Entity(key);
+    entity.setProperty("spielename", spielename);
+    entity.setProperty("dateOfPlay", dateOfPlay);
+    return entity;
   }
 
   public String getSpielename() {

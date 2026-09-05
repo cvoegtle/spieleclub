@@ -3,4 +3,7 @@
   <datastore-index kind="PersistentRankedSpiel" ancestor="true" source="manual">
     <property name="rankedSpiele_INTEGER_IDX" direction="asc"/>
   </datastore-index>
+  <datastore-index kind="PersistentGespieltesSpiel" ancestor="true" source="manual">
+    <property name="gespielteSpiele_INTEGER_IDX" direction="asc"/>
+  </datastore-index>
 </datastore-indexes>

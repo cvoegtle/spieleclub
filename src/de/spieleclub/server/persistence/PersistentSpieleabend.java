@@ -4,39 +4,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Query;
 
 import de.spieleclub.shared.GespieltesSpiel;
 import de.spieleclub.shared.Spieleabend;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 public class PersistentSpieleabend {
+  public static final String KIND = "PersistentSpieleabend";
   
-  @PrimaryKey
-  @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
   private Key key;
-
-  @Persistent
   private Date date;
-  
-  @Persistent
   private String description;
-  
-  @Persistent
   private Date creation;
-  
-  @Persistent
   private PersistentSpieler creator;
-  
-  @Persistent
-  private ArrayList<PersistentGespieltesSpiel> gespielteSpiele = new ArrayList<PersistentGespieltesSpiel>();
+  private ArrayList<PersistentGespieltesSpiel> gespielteSpiele = new ArrayList<>();
 
   public PersistentSpieleabend(Spieleabend spieleabend) {
     if (spieleabend.getWebsafeKey() != null) {
@@ -46,11 +31,46 @@ public class PersistentSpieleabend {
     setDescription(spieleabend.getDescription());
     setCreation(spieleabend.getCreation());
     
-    @SuppressWarnings("unchecked")
-    Iterator<GespieltesSpiel> it = spieleabend.getGespielteSpiele().iterator();
-    while (it.hasNext()) {
-      gespielteSpiele.add(new PersistentGespieltesSpiel(it.next()));
+    if (spieleabend.getGespielteSpiele() != null) {
+      for (Object gs : spieleabend.getGespielteSpiele()) {
+        gespielteSpiele.add(new PersistentGespieltesSpiel((GespieltesSpiel) gs));
+      }
     }
+  }
+
+  public PersistentSpieleabend(Entity entity, DatastoreService datastore) {
+    this.key = entity.getKey();
+    this.date = (Date) entity.getProperty("date");
+    this.description = (String) entity.getProperty("description");
+    this.creation = (Date) entity.getProperty("creation");
+
+    if (datastore != null && this.key != null) {
+      Query creatorQuery = new Query(PersistentSpieler.KIND).setAncestor(this.key);
+      Iterator<Entity> it = datastore.prepare(creatorQuery).asIterator();
+      if (it.hasNext()) {
+        this.creator = new PersistentSpieler(it.next());
+      }
+
+      Query gamesQuery = new Query(PersistentGespieltesSpiel.KIND)
+          .setAncestor(this.key)
+          .addSort("gespielteSpiele_INTEGER_IDX", Query.SortDirection.ASCENDING);
+      for (Entity child : datastore.prepare(gamesQuery).asIterable()) {
+        this.gespielteSpiele.add(new PersistentGespieltesSpiel(child));
+      }
+    }
+  }
+
+  public Entity toEntity() {
+    Entity entity;
+    if (key != null) {
+      entity = new Entity(key);
+    } else {
+      entity = new Entity(KIND);
+    }
+    entity.setProperty("date", date);
+    entity.setProperty("description", description);
+    entity.setProperty("creation", creation != null ? creation : new Date());
+    return entity;
   }
   
   public Spieleabend getSpieleabend() {
@@ -64,12 +84,13 @@ public class PersistentSpieleabend {
     spieleabend.setDescription(this.getDescription());
     
     if (gespielteSpiele != null) {
-      Iterator<PersistentGespieltesSpiel> it = gespielteSpiele.iterator();
-      while (it.hasNext()) {
-        spieleabend.add(it.next().getGespieltesSpiel());
+      for (PersistentGespieltesSpiel gs : gespielteSpiele) {
+        spieleabend.add(gs.getGespieltesSpiel());
       }
     }
-    spieleabend.setWebsafeKey(KeyFactory.keyToString(key));
+    if (key != null) {
+      spieleabend.setWebsafeKey(KeyFactory.keyToString(key));
+    }
     
     return spieleabend;
   }
@@ -123,9 +144,7 @@ public class PersistentSpieleabend {
   }
 
   public boolean hasSpielBeenPlayed(String spieleName) {
-    Iterator<PersistentGespieltesSpiel> it = gespielteSpiele.iterator();
-    while (it.hasNext()) {
-      PersistentGespieltesSpiel spiel = it.next();
+    for (PersistentGespieltesSpiel spiel : gespielteSpiele) {
       if (spiel.hasName(spieleName)) {
         return true;
       }

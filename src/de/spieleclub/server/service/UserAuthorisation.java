@@ -1,7 +1,9 @@
 package de.spieleclub.server.service;
 
-import javax.jdo.PersistenceManager;
+import java.util.logging.Logger;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -12,11 +14,13 @@ import de.spieleclub.shared.LoginInfo;
 import de.spieleclub.shared.Spieler;
 
 public class UserAuthorisation {
-  private String requestUri;
-  private PersistenceManager pm;
+  private static final Logger logger = Logger.getLogger(UserAuthorisation.class.getName());
 
-  public UserAuthorisation(PersistenceManager pm, String requestUri) {
-    this.pm = pm;
+  private String requestUri;
+  private DatastoreService datastore;
+
+  public UserAuthorisation(DatastoreService datastore, String requestUri) {
+    this.datastore = datastore;
     this.requestUri = requestUri;
   }
 
@@ -26,25 +30,33 @@ public class UserAuthorisation {
     UserService us = UserServiceFactory.getUserService();
     User user = us.getCurrentUser();
 
+    logger.info("checkAuthorisation: user=" + (user != null ? user.getEmail() : "null") + ", requestUri=" + requestUri);
+
     if (user != null) {
-      loginInfo.setAdmin(us.isUserAdmin());
+      boolean admin = us.isUserAdmin();
+      loginInfo.setAdmin(admin);
       Spieler spieler = readSpielerOrCreateNewSpieler(user);
 
       loginInfo.setSpieler(spieler);
       loginInfo.setLogoutUrl(us.createLogoutURL(requestUri));
+      logger.info("user logged in: " + user.getEmail() + ", isAdmin=" + admin + ", spieler=" + (spieler != null ? spieler.getName() : "null"));
     } else {
-      loginInfo.setLoginUrl(us.createLoginURL(requestUri));
+      String loginUrl = us.createLoginURL(requestUri);
+      loginInfo.setLoginUrl(loginUrl);
+      logger.info("user not logged in, loginUrl=" + loginUrl);
     }
 
     return loginInfo;
   }
 
   private Spieler readSpielerOrCreateNewSpieler(User user) {
-    Spieler spieler = new SpielerAccess(pm).read(user.getEmail());
+    Spieler spieler = new SpielerAccess(datastore).read(user.getEmail());
 
     if (spieler == null) {
       PersistentSpieler persistentSpieler = new PersistentSpieler(user.getEmail(), user.getNickname());
-      pm.makePersistent(persistentSpieler);
+      Entity entity = persistentSpieler.toEntity();
+      datastore.put(entity);
+      persistentSpieler.setKey(entity.getKey());
       spieler = persistentSpieler.getSpieler();
     }
     return spieler;

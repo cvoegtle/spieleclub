@@ -3,7 +3,7 @@ package de.spieleclub.server.service;
 import java.util.Date;
 import java.util.Iterator;
 
-import javax.jdo.PersistenceManager;
+import com.google.appengine.api.datastore.DatastoreService;
 
 import de.spieleclub.shared.AvailablePeriods;
 import de.spieleclub.shared.AvailablePeriodsFactory;
@@ -17,18 +17,16 @@ public class SpieleProfiler {
   private SpieleProfile spieleProfile;
   private RankingCache rankingCache;
   
-  public SpieleProfiler(PersistenceManager pm, String spieleName) {
-    RankingCacheFactory rankingCacheFactory = new RankingCacheFactory(pm);
+  public SpieleProfiler(DatastoreService datastore, String spieleName) {
+    RankingCacheFactory rankingCacheFactory = new RankingCacheFactory(datastore);
     rankingCache = rankingCacheFactory.getRankingCache();
     spieleProfile = new SpieleProfile(spieleName);
   }
-  
   
   public SpieleProfile getSpieleProfile() {
     return spieleProfile;
   }
 
-  
   public void generateProfile() {
     Date firstPlayedOn = rankingCache.getDateOfFirstPlay(spieleProfile.getName());
     spieleProfile.setFirstTimePlayed(firstPlayedOn);
@@ -36,20 +34,20 @@ public class SpieleProfiler {
     addRankingToProfile();
   }
   
-  
   private void addRankingToProfile() {
     AvailablePeriods availablePeriods = AvailablePeriodsFactory.makeAvailablePeriods(spieleProfile.getFirstTimePlayed());
     Period overallPeriod = availablePeriods.getOverallPeriod();
     Ranking ranking = rankingCache.getRanking(overallPeriod);
     
     RankedSpiel overallRank = ranking.getSpielByName(spieleProfile.getName());
-    spieleProfile.setAllTimeRanking(overallRank.getRank());
-    spieleProfile.setTimesPlayed(overallRank.getCount());
+    if (overallRank != null) {
+      spieleProfile.setAllTimeRanking(overallRank.getRank());
+      spieleProfile.setTimesPlayed(overallRank.getCount());
+    }
     
     addYearlyRankingToProfile(spieleProfile.getFirstTimePlayed());
   }
 
-  
   private void addYearlyRankingToProfile(Date startingDate) {
     AvailablePeriods availablePeriods = AvailablePeriodsFactory.makeAvailablePeriods(startingDate);
     availablePeriods.removeOtherThanYearlyPeriods();
@@ -60,7 +58,6 @@ public class SpieleProfiler {
     }   
   }
 
-  
   private void addRankingForYear(Period period) {
     RankedSpiel ranking = rankingCache.getRanking(period).getSpielByName(spieleProfile.getName());
     

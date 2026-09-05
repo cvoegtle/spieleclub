@@ -1,33 +1,35 @@
 package de.spieleclub.server.persistence;
 
-import java.util.Iterator;
-import java.util.List;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
 
 import de.spieleclub.shared.Spieler;
 
 public class SpielerAccess {
-  private PersistenceManager pm;
+  private DatastoreService datastore;
   
-  public SpielerAccess(PersistenceManager pm) {
-    this.pm = pm;
+  public SpielerAccess(DatastoreService datastore) {
+    this.datastore = datastore;
   }
   
   public Spieler read(String emailAddress) {
-    Query query = pm.newQuery(PersistentSpieler.class, "email == users_email");
-    query.declareImports("import java.lang.String");
-    query.declareParameters("String users_email");
+    Query query = new Query(PersistentSpieler.KIND)
+        .setFilter(new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, emailAddress));
     
-    @SuppressWarnings("unchecked")
-    List<PersistentSpieler> queryResult = (List<PersistentSpieler>)query.execute(emailAddress);
-    Iterator<PersistentSpieler> it = queryResult.iterator();
-    
-    if (it.hasNext()) {
-      return it.next().getSpieler();
-    }    
+    Entity matched = null;
+    for (Entity entity : datastore.prepare(query).asIterable()) {
+      if (matched == null) {
+        matched = entity;
+      }
+      if (entity.getKey().getParent() == null) {
+        matched = entity;
+        break;
+      }
+    }
+    if (matched != null) {
+      return new PersistentSpieler(matched).getSpieler();
+    }
     return null;
   }
-
 }

@@ -1,32 +1,18 @@
 package de.spieleclub.server.persistence;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 
 import de.spieleclub.shared.RankedSpiel;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 public class PersistentRankedSpiel {
-  @PrimaryKey
-  @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-  private Key key;
+  public static final String KIND = "PersistentRankedSpiel";
 
-  @Persistent
+  private Key key;
   private int rank;
-  
-  @Persistent
   private String formattedRank = "";
-  
-  @Persistent
   private String name = "";
-  
-  @Persistent
-  int count = 0;
+  private int count = 0;
 
   public PersistentRankedSpiel(RankedSpiel rankedSpiel) {
     rank = rankedSpiel.getRank();
@@ -34,14 +20,38 @@ public class PersistentRankedSpiel {
     name = rankedSpiel.getName();
     count = rankedSpiel.getCount();
   }
-  
+
+  public PersistentRankedSpiel(Entity entity) {
+    this.key = entity.getKey();
+    Object r = entity.getProperty("rank");
+    this.rank = r != null ? ((Number) r).intValue() : 0;
+    this.formattedRank = (String) entity.getProperty("formattedRank");
+    this.name = (String) entity.getProperty("name");
+    Object c = entity.getProperty("count");
+    this.count = c != null ? ((Number) c).intValue() : 0;
+  }
+
+  public Entity toEntity(Key parentKey, int index) {
+    Entity entity;
+    if (key != null) {
+      entity = new Entity(key);
+    } else {
+      entity = new Entity(KIND, parentKey);
+    }
+    entity.setProperty("rank", (long) rank);
+    entity.setProperty("formattedRank", formattedRank);
+    entity.setProperty("name", name);
+    entity.setProperty("count", (long) count);
+    entity.setProperty("rankedSpiele_INTEGER_IDX", (long) index);
+    return entity;
+  }
+
   public RankedSpiel getRankedSpiel() {
     RankedSpiel rankedSpiel = new RankedSpiel();
     rankedSpiel.setRank(rank);
     rankedSpiel.setFormattedRank(formattedRank);
     rankedSpiel.setName(name);
     rankedSpiel.setCount(count);
-    
     return rankedSpiel;
   }
 
@@ -52,5 +62,4 @@ public class PersistentRankedSpiel {
   public void setKey(Key key) {
     this.key = key;
   }
-
 }
