@@ -23,6 +23,7 @@
   <automatic-scaling>
     <min-idle-instances>0</min-idle-instances>
     <max-idle-instances>1</max-idle-instances>
+    <max-instances>1</max-instances>
   </automatic-scaling>
 
 </appengine-web-app>
