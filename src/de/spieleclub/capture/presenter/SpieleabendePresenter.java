@@ -52,7 +52,7 @@ public class SpieleabendePresenter implements Presenter, SpieleabendeView.Presen
     view.setUserLink(Global.login.getLink(Global.texte.login(), Global.texte.logout()));
     view.setEditable(Global.login.isAdmin());
 
-    view.setAvailablePeriods(Global.availablePeriods.getAvailablePeriodsAsStrings());
+    view.setAvailablePeriods(Global.availablePeriods.getAvailablePeriodsAsStrings(false));
     readSelectedPeriodFromUrl();
     view.setSelectedPeriod(selectedPeriod.getLabel());
     view.setAnalysisLink(createAnalysisLinkForPeriod(selectedPeriod.getLabel()));
@@ -79,7 +79,7 @@ public class SpieleabendePresenter implements Presenter, SpieleabendeView.Presen
 
   @Override
   public void onPeriodChanged(String selectedPeriod) {
-    this.selectedPeriod = Global.availablePeriods.getPeriodByLabel(selectedPeriod);
+    this.selectedPeriod = Global.availablePeriods.getYearlyPeriodByLabel(selectedPeriod);
     view.setAnalysisLink(createAnalysisLinkForPeriod(selectedPeriod));
     loadSpieleabende();
   }
@@ -135,7 +135,7 @@ public class SpieleabendePresenter implements Presenter, SpieleabendeView.Presen
   private void readSelectedPeriodFromUrl() {
     String period = Window.Location.getParameter("period");
     if (period != null && period.length() > 0) {
-      selectedPeriod = Global.availablePeriods.getPeriodByLabel(period);
+      selectedPeriod = Global.availablePeriods.getYearlyPeriodByLabel(period);
     }
   }
   

@@ -86,7 +86,11 @@ public class AnalysisPresenter implements Presenter, AnalysisView.Presenter {
   }
   
   private String createSpieleabendeLinkForPeriod(String period) {
-    return "spieleclub.html?period="+period;
+    Period p = Global.availablePeriods.getPeriodByLabel(period);
+    if (Global.availablePeriods.isOverallPeriod(p)) {
+      return "spieleclub.html";
+    }
+    return "spieleclub.html?period=" + period;
   }
 
 }

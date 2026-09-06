@@ -2,3 +2,5 @@ target/
 .idea/workspace.xml
 out/
 .DS_Store
+gwt-unitCache/
+web/WEB-INF/deploy/

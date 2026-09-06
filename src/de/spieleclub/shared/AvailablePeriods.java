@@ -41,10 +41,16 @@ public class AvailablePeriods {
   }
 
   public List<String> getAvailablePeriodsAsStrings() {
+    return getAvailablePeriodsAsStrings(true);
+  }
+
+  public List<String> getAvailablePeriodsAsStrings(boolean includeOverallPeriod) {
     ArrayList<String> availablePeriods = new ArrayList<>();
 
     for (Period period : periods) {
-      availablePeriods.add(period.getLabel());
+      if (includeOverallPeriod || period != overallPeriod) {
+        availablePeriods.add(period.getLabel());
+      }
     }
 
     return availablePeriods;
@@ -65,6 +71,24 @@ public class AvailablePeriods {
       }
     }
     return period;
+  }
+
+  public Period getYearlyPeriodByLabel(String selectedPeriod) {
+    if (selectedPeriod != null) {
+      for (Period period : periods) {
+        if (period != overallPeriod && selectedPeriod.equals(period.getLabel())) {
+          return period;
+        }
+      }
+    }
+    return getCurrentPeriod();
+  }
+
+  public boolean isOverallPeriod(Period period) {
+    if (period == null || overallPeriod == null) {
+      return false;
+    }
+    return period == overallPeriod || (period.getLabel() != null && period.getLabel().equals(overallPeriod.getLabel()));
   }
 
   public List<Period> getRecalculationRelevantPeriods() {
