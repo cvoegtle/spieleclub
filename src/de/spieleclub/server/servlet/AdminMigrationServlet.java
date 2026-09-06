@@ -22,11 +22,15 @@ public class AdminMigrationServlet extends HttpServlet {
     if (path == null) {
       path = "";
     }
+    if (path.endsWith("/") && path.length() > 1) {
+      path = path.substring(0, path.length() - 1);
+    }
 
-    if (path.equals("/rename") || req.getServletPath().equals("/admin/rename")) {
+    if (path.equals("/rename")) {
       String oldName = req.getParameter("old");
       String newName = req.getParameter("new");
       if (oldName == null || newName == null || oldName.trim().isEmpty() || newName.trim().isEmpty()) {
+        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         out.println("Fehler: Parameter 'old' und 'new' sind erforderlich. Beispiel: /admin/rename?old=AlterName&new=NeuerName");
         return;
       }
@@ -34,14 +38,24 @@ public class AdminMigrationServlet extends HttpServlet {
       if (success) {
         out.println("Erfolg: Spiel '" + oldName + "' wurde erfolgreich umbenannt zu '" + newName + "'. Caches wurden geleert.");
       } else {
+        resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
         out.println("Fehler: Spiel '" + oldName + "' konnte nicht gefunden oder umbenannt werden.");
       }
       return;
     }
 
-    // Default: Migration
-    out.println("Starte Migration der gespielten Spiele auf technische Keys...");
-    String result = SpieleclubServiceImpl.migrateGespielteSpieleToTechnicalKeys();
-    out.println(result);
+    if (path.equals("/migrate")) {
+      out.println("Starte Migration der gespielten Spiele auf technische Keys...");
+      String result = SpieleclubServiceImpl.migrateGespielteSpieleToTechnicalKeys();
+      out.println(result);
+      return;
+    }
+
+    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+    out.println("Unbekannter Pfad: " + req.getRequestURI());
+    out.println();
+    out.println("Verfügbare Endpunkte:");
+    out.println(" - /admin/migrate : Migration der gespielten Spiele auf technische Keys");
+    out.println(" - /admin/rename?old=<AlterName>&new=<NeuerName> : Spiel umbenennen bzw. zusammenführen");
   }
 }
