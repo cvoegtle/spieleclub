@@ -2,6 +2,7 @@ package de.spieleclub.server.persistence;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 import de.spieleclub.shared.RankedSpiel;
 
@@ -9,12 +10,16 @@ public class PersistentRankedSpiel {
   public static final String KIND = "PersistentRankedSpiel";
 
   private Key key;
+  private Key spielKey;
   private int rank;
   private String formattedRank = "";
   private String name = "";
   private int count = 0;
 
   public PersistentRankedSpiel(RankedSpiel rankedSpiel) {
+    if (rankedSpiel.getSpielWebsafeKey() != null) {
+      spielKey = KeyFactory.stringToKey(rankedSpiel.getSpielWebsafeKey());
+    }
     rank = rankedSpiel.getRank();
     formattedRank = rankedSpiel.getFormattedRank();
     name = rankedSpiel.getName();
@@ -23,6 +28,7 @@ public class PersistentRankedSpiel {
 
   public PersistentRankedSpiel(Entity entity) {
     this.key = entity.getKey();
+    this.spielKey = (Key) entity.getProperty("spielKey");
     Object r = entity.getProperty("rank");
     this.rank = r != null ? ((Number) r).intValue() : 0;
     this.formattedRank = (String) entity.getProperty("formattedRank");
@@ -43,6 +49,9 @@ public class PersistentRankedSpiel {
     entity.setProperty("name", name);
     entity.setProperty("count", (long) count);
     entity.setProperty("rankedSpiele_INTEGER_IDX", (long) index);
+    if (spielKey != null) {
+      entity.setProperty("spielKey", spielKey);
+    }
     return entity;
   }
 
@@ -52,6 +61,9 @@ public class PersistentRankedSpiel {
     rankedSpiel.setFormattedRank(formattedRank);
     rankedSpiel.setName(name);
     rankedSpiel.setCount(count);
+    if (spielKey != null) {
+      rankedSpiel.setSpielWebsafeKey(KeyFactory.keyToString(spielKey));
+    }
     return rankedSpiel;
   }
 
@@ -61,5 +73,13 @@ public class PersistentRankedSpiel {
 
   public void setKey(Key key) {
     this.key = key;
+  }
+
+  public Key getSpielKey() {
+    return spielKey;
+  }
+
+  public void setSpielKey(Key spielKey) {
+    this.spielKey = spielKey;
   }
 }

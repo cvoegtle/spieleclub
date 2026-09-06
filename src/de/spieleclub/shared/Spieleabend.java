@@ -46,7 +46,10 @@ public class Spieleabend implements Serializable, Cloneable {
 
   public void add(Spiel spiel, String addInfo) {
     GespieltesSpiel newSpiel = new GespieltesSpiel(spiel.getName(), addInfo);
-    // pr�fen, ob wir das Spiel schon in der Liste haben, dann nur count erh�hen
+    if (spiel.getWebsafeKey() != null) {
+      newSpiel.setSpielWebsafeKey(spiel.getWebsafeKey());
+    }
+    // prüfen, ob wir das Spiel schon in der Liste haben, dann nur count erhöhen
     Iterator<GespieltesSpiel> it = gespielteSpiele.iterator();
     while (it.hasNext()) {
       GespieltesSpiel gs = it.next();

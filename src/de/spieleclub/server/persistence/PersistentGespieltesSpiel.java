@@ -10,6 +10,7 @@ public class PersistentGespieltesSpiel implements Comparable<PersistentGespielte
   public static final String KIND = "PersistentGespieltesSpiel";
 
   private Key key;
+  private Key spielKey;
   private String name;
   private String zusatz;
   private int count;
@@ -17,6 +18,9 @@ public class PersistentGespieltesSpiel implements Comparable<PersistentGespielte
   public PersistentGespieltesSpiel(GespieltesSpiel gespieltesSpiel) {
     if (gespieltesSpiel.getWebsafeKey() != null) {
       key = KeyFactory.stringToKey(gespieltesSpiel.getWebsafeKey());
+    }
+    if (gespieltesSpiel.getSpielWebsafeKey() != null) {
+      spielKey = KeyFactory.stringToKey(gespieltesSpiel.getSpielWebsafeKey());
     }
     name = gespieltesSpiel.getName();
     zusatz = gespieltesSpiel.getZusatz();
@@ -33,6 +37,7 @@ public class PersistentGespieltesSpiel implements Comparable<PersistentGespielte
     this.zusatz = (String) entity.getProperty("zusatz");
     Object countVal = entity.getProperty("count");
     this.count = countVal != null ? ((Number) countVal).intValue() : 0;
+    this.spielKey = (Key) entity.getProperty("spielKey");
   }
 
   public Entity toEntity(Key parentKey, int index) {
@@ -46,6 +51,9 @@ public class PersistentGespieltesSpiel implements Comparable<PersistentGespielte
     entity.setProperty("zusatz", zusatz);
     entity.setProperty("count", (long) count);
     entity.setProperty("gespielteSpiele_INTEGER_IDX", (long) index);
+    if (spielKey != null) {
+      entity.setProperty("spielKey", spielKey);
+    }
     return entity;
   }
   
@@ -53,6 +61,9 @@ public class PersistentGespieltesSpiel implements Comparable<PersistentGespielte
     GespieltesSpiel gs = new GespieltesSpiel();
     if (key != null) {
       gs.setWebsafeKey(KeyFactory.keyToString(key));
+    }
+    if (spielKey != null) {
+      gs.setSpielWebsafeKey(KeyFactory.keyToString(spielKey));
     }
     gs.setName(name);
     gs.setZusatz(zusatz);
@@ -89,6 +100,14 @@ public class PersistentGespieltesSpiel implements Comparable<PersistentGespielte
 
   public void setKey(Key key) {
     this.key = key;
+  }
+
+  public Key getSpielKey() {
+    return spielKey;
+  }
+
+  public void setSpielKey(Key spielKey) {
+    this.spielKey = spielKey;
   }
 
   public String getName() {

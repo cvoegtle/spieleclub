@@ -11,11 +11,13 @@ public class RankedSpiel implements Serializable, ColumnAccess {
   private String formattedRank = "";
   private String name = "";
   int count = 0;
+  private String spielWebsafeKey;
   
   public RankedSpiel(int rank, GespieltesSpiel spiel) {
     this.rank = rank;
     this.name = spiel.getName();
     this.count = spiel.getCount();
+    this.spielWebsafeKey = spiel.getSpielWebsafeKey();
   }
 
   public RankedSpiel() {    
@@ -90,6 +92,14 @@ public class RankedSpiel implements Serializable, ColumnAccess {
 
   public void setCount(int count) {
     this.count = count;
+  }
+
+  public String getSpielWebsafeKey() {
+    return spielWebsafeKey;
+  }
+
+  public void setSpielWebsafeKey(String spielWebsafeKey) {
+    this.spielWebsafeKey = spielWebsafeKey;
   }
 
 }

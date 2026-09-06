@@ -75,7 +75,7 @@ public class SpieleStatisticCalculator {
   
   @SuppressWarnings("unchecked")
   private HashMap<String, GespieltesSpiel> countHowManyTimesPlayed() {
-    HashMap<String, GespieltesSpiel> gespielteSpiele= new HashMap<String, GespieltesSpiel>();
+    HashMap<String, GespieltesSpiel> gespielteSpiele = new HashMap<String, GespieltesSpiel>();
     
     Iterator<Spieleabend> it = spieleabende.iterator();
     while (it.hasNext()) {
@@ -83,10 +83,12 @@ public class SpieleStatisticCalculator {
       Iterator<GespieltesSpiel> spieleIt = spieleabend.getGespielteSpiele().iterator();
       while (spieleIt.hasNext()) {
         GespieltesSpiel spiel = spieleIt.next();
-        GespieltesSpiel knownSpiel = gespielteSpiele.get(spiel.getName());
+        String key = (spiel.getSpielWebsafeKey() != null && !spiel.getSpielWebsafeKey().isEmpty())
+            ? spiel.getSpielWebsafeKey() : spiel.getName();
+        GespieltesSpiel knownSpiel = gespielteSpiele.get(key);
         if (knownSpiel == null) {
           knownSpiel = spiel.clone();
-          gespielteSpiele.put(knownSpiel.getName(), knownSpiel);
+          gespielteSpiele.put(key, knownSpiel);
         } else {
           knownSpiel.incrementCount(spiel.getCount());
         }

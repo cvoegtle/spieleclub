@@ -28,6 +28,15 @@
       <url-pattern>/spieleclub_analysis/service</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+      <servlet-name>adminMigrationServlet</servlet-name>
+      <servlet-class>de.spieleclub.server.servlet.AdminMigrationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>adminMigrationServlet</servlet-name>
+      <url-pattern>/admin/*</url-pattern>
+    </servlet-mapping>
+
     <!-- Default page to serve -->
     <welcome-file-list>
       <welcome-file>spieleclub.html</welcome-file>
@@ -35,8 +44,9 @@
 
     <security-constraint>
       <web-resource-collection>
-        <web-resource-name>remoteapi</web-resource-name>
+        <web-resource-name>admin-areas</web-resource-name>
         <url-pattern>/remote_api</url-pattern>
+        <url-pattern>/admin/*</url-pattern>
       </web-resource-collection>
       <auth-constraint>
         <role-name>admin</role-name>

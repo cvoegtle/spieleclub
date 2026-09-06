@@ -8,6 +8,7 @@ public class GespieltesSpiel implements Serializable, Cloneable, ColumnAccess, C
   private static final long serialVersionUID = 1L;
 
   private String websafeKey;
+  private String spielWebsafeKey;
   
   private String name;
   private String zusatz;
@@ -25,6 +26,8 @@ public class GespieltesSpiel implements Serializable, Cloneable, ColumnAccess, C
   public GespieltesSpiel clone() {
     GespieltesSpiel clonedSpiel = new GespieltesSpiel(name, zusatz);
     clonedSpiel.setCount(count);
+    clonedSpiel.setWebsafeKey(websafeKey);
+    clonedSpiel.setSpielWebsafeKey(spielWebsafeKey);
     return clonedSpiel;
   }
 
@@ -50,6 +53,14 @@ public class GespieltesSpiel implements Serializable, Cloneable, ColumnAccess, C
 
   public void setWebsafeKey(String websafeKey) {
     this.websafeKey = websafeKey;
+  }
+
+  public String getSpielWebsafeKey() {
+    return spielWebsafeKey;
+  }
+
+  public void setSpielWebsafeKey(String spielWebsafeKey) {
+    this.spielWebsafeKey = spielWebsafeKey;
   }
 
   public String getDisplayName() {
