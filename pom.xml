@@ -136,6 +136,39 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
             </plugin>
+            <plugin>
+                <groupId>net.ltgt.gwt.maven</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <executions>
+                    <execution>
+                        <id>gwt-compile-capture</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <moduleName>de.spieleclub.spieleclub_capture</moduleName>
+                            <moduleShortName>spieleclub_capture</moduleShortName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>gwt-compile-analysis</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <moduleName>de.spieleclub.spieleclub_analysis</moduleName>
+                            <moduleShortName>spieleclub_analysis</moduleShortName>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceLevel>17</sourceLevel>
+                    <style>OBFUSCATED</style>
+                    <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+                    <deploy>${project.build.directory}/${project.build.finalName}/WEB-INF/deploy</deploy>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
